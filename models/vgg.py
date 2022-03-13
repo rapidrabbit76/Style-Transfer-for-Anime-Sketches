@@ -1,7 +1,5 @@
-from joblib import parallel_backend
-from torchvision.models import vgg19
-import torch
 import torch.nn as nn
+from torchvision.models import vgg19
 
 
 def VGG19() -> nn.Module:
