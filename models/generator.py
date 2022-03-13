@@ -5,9 +5,8 @@ from models.blocks import ConvBlock
 
 
 class UnetGenerator(nn.Module):
-    def __init__(self, in_channels: int, out_channels: int) -> None:
+    def __init__(self, in_channels: int, out_channels: int, dim=16):
         super().__init__()
-        dim = 16
         self.e0 = nn.Sequential(
             ConvBlock(in_channels, dim * 1, 3, 1, 1),
             ConvBlock(dim * 1, dim * 1, 3, 1, 1),

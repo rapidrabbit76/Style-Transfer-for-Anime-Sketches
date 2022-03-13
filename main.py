@@ -18,6 +18,9 @@ def main():
     parser.add_argument("--batch_size", type=int, default=2)
     parser.add_argument("--num_workers", type=int, default=1)
 
+    # model
+    parser.add_argument("--dim", type=int, default=16)
+
     # training
     parser.add_argument("--epochs", type=int)
     parser.add_argument("--lr", type=float)
