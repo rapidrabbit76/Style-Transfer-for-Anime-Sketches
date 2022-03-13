@@ -26,9 +26,9 @@ def training(args):
     ################ dataset ################
     train_transforms = Transforms(args.image_size, train=True)
     test_transforms = Transforms(args.image_size, train=False)
-    train_dataloader = build_dataloader(args, train_transforms, mode=Mode.TRAIN)
-    test_dataloader = build_dataloader(args, test_transforms, mode=Mode.TEST)
-    test_batch = next(iter(test_dataloader))
+    train_dataset = build_dataloader(args, train_transforms, mode=Mode.TRAIN)
+    test_dataset = build_dataloader(args, test_transforms, mode=Mode.TEST)
+    test_batch = next(iter(test_dataset))
     line, gray, color = test_batch
     line = line.to(device)
     gray = gray.to(device)
@@ -74,7 +74,7 @@ def training(args):
             gen_optim,
             disc_optim,
             epoch,
-            train_dataloader,
+            train_dataset,
             test_batch,
         )
 
