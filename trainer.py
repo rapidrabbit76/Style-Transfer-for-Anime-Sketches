@@ -38,7 +38,7 @@ def training(args):
     ################  model  ################
     V = VGG19().to(device)
     D = Discriminator(3).to(device)
-    G_f = UnetGenerator(1, 3).to(device)
+    G_f = UnetGenerator(1, 3, args.dim).to(device)
     G_g1 = GuideDecoder(256, 1).to(device)
     G_g2 = GuideDecoder(512, 3).to(device)
 

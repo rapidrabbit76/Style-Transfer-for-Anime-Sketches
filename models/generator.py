@@ -39,11 +39,10 @@ class UnetGenerator(nn.Module):
 
         self.middle = ConvBlock(dim * 16, dim * 128, 4, 2, 1)
         self.style = nn.Sequential(
-            nn.BatchNorm1d(4096),
             nn.Linear(4096, dim * 128),
         )
 
-        self.upsample = nn.Upsample(scale_factor=2)
+        self.upsample = nn.Upsample(scale_factor=2, mode="nearest")
 
         self.d4_0 = nn.Sequential(
             self.upsample,
@@ -72,7 +71,6 @@ class UnetGenerator(nn.Module):
         self.last = nn.Sequential(
             self.upsample,
             ConvBlock(dim * 2 + dim * 2, dim * 2, 3, 1, 1),
-            ConvBlock(dim * 2, dim * 2, 1, 1, 0),
             nn.Conv2d(dim * 2, out_channels, 3, 1, 1, bias=False),
             nn.Tanh(),
         )
