@@ -7,17 +7,26 @@ Activation = nn.ReLU
 
 class ConvBlock(nn.Module):
     def __init__(
-        self, inp: int, outp: int, k: int = 3, s: int = 1, p: int = 0
+        self,
+        inp: int,
+        outp: int,
+        k: int = 3,
+        s: int = 1,
+        p: int = 0,
+        norm=True,
+        act=True,
     ) -> None:
         super().__init__()
-        self.conv = nn.Conv2d(inp, outp, k, s, p, bias=False)
-        self.norm = Normalization(outp)
-        self.act = Activation(inplace=True)
+        layer = [nn.ReflectionPad2d(p)]
+        layer += [nn.Conv2d(inp, outp, k, s, bias=False)]
+        if norm:
+            layer += [Normalization(outp)]
+        if act:
+            layer += [Activation(inplace=True)]
+        self.block = nn.Sequential(*layer)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.conv(x)
-        x = self.norm(x)
-        x = self.act(x)
+        x = self.block(x)
         return x
 
 
