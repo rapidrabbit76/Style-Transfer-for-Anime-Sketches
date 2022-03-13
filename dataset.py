@@ -72,3 +72,59 @@ class Transforms:
         color = self.color_normalize(image=color)["image"]
         return line, gray, color
 
+
+class Dataset(data.Dataset):
+    def __init__(
+        self,
+        line_paths: List[str],
+        color_paths: List[str],
+        transforms: Callable,
+    ) -> None:
+        super().__init__()
+        self.__total_len = len(line_paths)
+        self.samples = list(zip(line_paths, color_paths))
+        self.transforms = transforms
+
+    def __len__(self):
+        return self.__total_len
+
+    @staticmethod
+    def _loadder(path: str, code: int):
+        image = cv2.imread(path)
+        image = cv2.cvtColor(image, code)
+        return image
+
+    def __getitem__(
+        self, index: int
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        line_path, color_path = self.samples[index]
+        line = self._loadder(line_path, cv2.COLOR_BGR2GRAY)
+        color = self._loadder(color_path, cv2.COLOR_BGR2RGB)
+        gray = cv2.cvtColor(np.copy(color), cv2.COLOR_BGR2GRAY)
+
+        if self.transforms is not None:
+            line, gray, color = self.transforms(line, gray, color)
+        return line, gray, color
+
+
+def build_dataloader(
+    args,
+    transforms: Callable,
+    mode: Mode,
+):
+    line_paths = sorted(
+        glob(os.path.join(args.root_dir, mode.value, "line", "*"))
+    )
+    color_paths = sorted(
+        glob(os.path.join(args.root_dir, mode.value, "image", "*"))
+    )
+    assert len(line_paths) != 0
+    assert len(color_paths) != 0
+    assert len(line_paths) == len(color_paths)
+    dataset = Dataset(line_paths, color_paths, transforms)
+    return data.DataLoader(
+        dataset,
+        batch_size=args.batch_size if mode is Mode.TRAIN else 8,
+        shuffle=True if mode is Mode.TRAIN else False,
+        num_workers=args.num_workers,
+    )
