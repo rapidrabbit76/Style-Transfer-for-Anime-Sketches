@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 import wandb
@@ -104,11 +105,11 @@ def training_loop(
     gen_optim: optim.Optimizer,
     disc_optim: optim.Optimizer,
     epoch: int,
-    train_dataloader,
+    train_dataset: DataLoader,
     test_batch: batch_type,
 ):
     global gs
-    pbar = tqdm(train_dataloader)
+    pbar = tqdm(train_dataset)
     for batch_idx, batch in enumerate(pbar):
         training_info = training_step(
             batch, V, D, G_f, G_g1, G_g2, gen_optim, disc_optim
