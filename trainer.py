@@ -1,16 +1,16 @@
 import os
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchmetrics.functional as MF
 import torch.optim as optim
 from tqdm import tqdm
 
-from models import VGG19, Discriminator, GuideDecoder, UnetGenerator
-from dataset import build_dataloader, Transforms
-from utils import Mode, build_log_image, logits_2_prob
 import wandb
+from dataset import Transforms, build_dataloader
+from models import VGG19, Discriminator, GuideDecoder, UnetGenerator
+from utils import Mode, build_log_image, logits_2_prob
 
 # Line , Gray, Color
 batch_type = Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
