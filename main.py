@@ -1,4 +1,5 @@
 import argparse
+from trainer import training
 
 
 def main():
@@ -31,6 +32,7 @@ def main():
     parser.add_argument("--upload_artifacts", action="store_true")
 
     args = parser.parse_args()
+    training(args)
 
 
 if __name__ == "__main__":
