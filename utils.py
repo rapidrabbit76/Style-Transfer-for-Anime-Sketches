@@ -1,10 +1,12 @@
 import os
 from enum import Enum
 from typing import List, Union
-import torch.nn as nn
+
 import numpy as np
 import torch
-from torchvision.utils import save_image, make_grid
+import torch.nn as nn
+from torchvision.utils import make_grid, save_image
+
 import wandb
 
 
