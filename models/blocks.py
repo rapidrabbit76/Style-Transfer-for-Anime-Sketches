@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-Normalization = nn.InstanceNorm2d
+Normalization = nn.BatchNorm2d
 Activation = nn.ReLU
 
 
